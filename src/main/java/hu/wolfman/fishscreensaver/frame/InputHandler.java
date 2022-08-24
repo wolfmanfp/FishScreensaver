@@ -20,6 +20,10 @@ public class InputHandler implements MouseListener, MouseMotionListener, KeyList
 
     @Override
     public void mousePressed(MouseEvent e) {
+        exitApp();
+    }
+
+    private static void exitApp() {
         try {
             Thread.sleep(50);
         } catch (InterruptedException ex) {
@@ -58,12 +62,7 @@ public class InputHandler implements MouseListener, MouseMotionListener, KeyList
 
         distance = MathUtil.distance(oldX, x, oldY, y);
         if (distance > 10) {
-            try {
-                Thread.sleep(50);
-                System.exit(0);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(InputHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            exitApp();
         }
 
         oldX = x;
@@ -76,12 +75,7 @@ public class InputHandler implements MouseListener, MouseMotionListener, KeyList
 
     @Override
     public void keyPressed(KeyEvent e) {
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(InputHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.exit(0);
+        exitApp();
     }
 
     @Override
