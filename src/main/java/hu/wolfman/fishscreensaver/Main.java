@@ -5,6 +5,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
+import com.sun.jna.platform.win32.WinUser;
 import hu.wolfman.fishscreensaver.frame.*;
 import hu.wolfman.fishscreensaver.util.Messages;
 import hu.wolfman.fishscreensaver.util.StringUtil;
@@ -78,6 +79,8 @@ public final class Main {
 
     private static void testPreview() {
         JFrame frame = new JFrame();
+        frame.setUndecorated(true);
+        frame.setResizable(false);
         frame.setBounds(100, 100, 100, 100);
         frame.setVisible(true);
         initPreview(new HWND(Native.getComponentPointer(frame)));
@@ -101,12 +104,22 @@ public final class Main {
             int numberOfFish = Settings.readNumber();
             frame.setVisible(true);
 
+            // Source: https://github.com/haschdl/processingscreensaver_windows
+            HWND hwndChild = User32.INSTANCE.FindWindow("SunAwtFrame", null);
             RECT previewWindowRect = new RECT();
             User32.INSTANCE.GetWindowRect(parentWindow, previewWindowRect);
-            Rectangle awtRectangle = previewWindowRect.toRectangle();
 
-            frame.setBounds(awtRectangle);
-            frame.setLocation(new Point(awtRectangle.x, awtRectangle.y));
+            //https://msdn.microsoft.com/en-us/library/windows/desktop/ms633541(v=vs.85).aspx
+            User32.INSTANCE.SetWindowLong(hwndChild, WinUser.GWL_STYLE, 0); //keeps all existing styles, minus WS_CAPTION
+            User32.INSTANCE.SetWindowLong(hwndChild, WinUser.GWL_STYLE, WinUser.WS_CHILDWINDOW | WinUser.WS_VISIBLE); //keeps all existing styles, minus WS_CAPTION
+
+            //SetWindowsPos: https://msdn.microsoft.com/en-us/library/windows/desktop/ms633545(v=vs.85).aspx
+            HWND zero = new HWND((new User32.INT_PTR(Integer.parseInt("0", 16))).toPointer()); //replaces constant HWND_TOP (0): Places the window at the top of the Z order.
+            User32.INSTANCE.SetParent(hwndChild, parentWindow);
+            User32.INSTANCE.SetWindowPos(hwndChild, zero, 0, 0,
+                    previewWindowRect.right - previewWindowRect.left,
+                    previewWindowRect.bottom - previewWindowRect.top,
+                    0x0040);
 
             vezerlo.vizbeRak(numberOfFish);
         } catch (Exception e) {
