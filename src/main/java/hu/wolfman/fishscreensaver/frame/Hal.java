@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package screensaver;
+package hu.wolfman.fishscreensaver.frame;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -26,9 +22,9 @@ public class Hal extends Thread {
         this.kepMagassag = kepMagassag;
     }
 
-    public void beallit(double kepX, double kepY, boolean fut, double XLepeskoz, 
-            double YLepeskoz, int akvariumSzelesseg, int akvariumMagassag, 
-            Vezerlo vezerlo, long ido) {
+    public void beallit(double kepX, double kepY, boolean fut, double XLepeskoz,
+                        double YLepeskoz, int akvariumSzelesseg, int akvariumMagassag,
+                        Vezerlo vezerlo, long ido) {
         this.kepX = kepX;
         this.kepY = kepY;
         this.fut = fut;
@@ -39,12 +35,12 @@ public class Hal extends Thread {
         this.vezerlo = vezerlo;
         this.ido = ido;
     }
-    
+
     public void rajzol(Graphics g) {
         if (XLepeskoz < 0) {
-            g.drawImage(kep, (int)kepX, (int)kepY, kepSzelesseg, kepMagassag, null);
+            g.drawImage(kep, (int) kepX, (int) kepY, kepSzelesseg, kepMagassag, null);
         } else {
-            g.drawImage(kep, (int)kepX+kepSzelesseg, (int)kepY, -kepSzelesseg, kepMagassag, null);
+            g.drawImage(kep, (int) kepX + kepSzelesseg, (int) kepY, -kepSzelesseg, kepMagassag, null);
         }
     }
 
@@ -53,7 +49,7 @@ public class Hal extends Thread {
         while (fut) {
             mozdul();
             frissit();
-            keseltet();
+            kesleltet();
         }
     }
 
@@ -72,7 +68,7 @@ public class Hal extends Thread {
         vezerlo.frissit();
     }
 
-    private void keseltet() {
+    private void kesleltet() {
         try {
             Thread.sleep(ido);
         } catch (InterruptedException ex) {
@@ -80,28 +76,12 @@ public class Hal extends Thread {
         }
     }
 
-    public Image getKep() {
-        return kep;
-    }
-
-    public void setKep(Image kep) {
-        this.kep = kep;
-    }
-
     public int getKepSzelesseg() {
         return kepSzelesseg;
     }
 
-    public void setKepSzelesseg(int kepSzelesseg) {
-        this.kepSzelesseg = kepSzelesseg;
-    }
-
     public int getKepMagassag() {
         return kepMagassag;
-    }
-
-    public void setKepMagassag(int kepMagassag) {
-        this.kepMagassag = kepMagassag;
     }
 
 }

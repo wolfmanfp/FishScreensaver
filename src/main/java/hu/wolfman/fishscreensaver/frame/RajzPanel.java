@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package hu.wolfman.fishscreensaver.frame;
 
-package screensaver;
+import hu.wolfman.fishscreensaver.util.ImageUtil;
 
-import tools.ImageTools;
+import javax.swing.*;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -14,20 +10,13 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
-/**
- *
- * @author hallgato
- */
-public class RajzPanel extends javax.swing.JPanel {
-    private Image kep = ImageTools.getImage("/kepek/hatter.jpg");
-    private Image logo;
+public class RajzPanel extends JPanel {
+    private final Image kep = ImageUtil.getImage("/kepek/hatter.jpg");
     private Vezerlo vezerlo;
-    /**
-     * Creates new form RajzPanel
-     */
+
     public RajzPanel() {
         initComponents();
-        //hideCursor();
+        hideCursor();
     }
 
     public void setVezerlo(Vezerlo vezerlo) {
@@ -35,22 +24,26 @@ public class RajzPanel extends javax.swing.JPanel {
     }
 
     private void hideCursor() {
+        // Source: https://stackoverflow.com/questions/1984071/how-to-hide-cursor-in-a-swing-application
         BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
         Cursor blankCursor = Toolkit.getDefaultToolkit()
                 .createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
         this.setCursor(blankCursor);
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g); 
-        int kezdox=0, kezdoy=0, 
-            szelesseg=this.getWidth(), 
-            magassag=this.getHeight();
-	g.drawImage(kep, kezdox, kezdoy, szelesseg, magassag, null); 
-        if(vezerlo!=null) vezerlo.rajzol(g);
+        super.paintComponent(g);
+        int kezdoX = 0;
+        int kezdoY = 0;
+        int szelesseg = this.getWidth();
+        int magassag = this.getHeight();
+        g.drawImage(kep, kezdoX, kezdoY, szelesseg, magassag, null);
+        if (vezerlo != null) {
+            vezerlo.rajzol(g);
+        }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

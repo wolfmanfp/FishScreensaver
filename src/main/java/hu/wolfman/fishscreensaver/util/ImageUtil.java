@@ -3,19 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tools;
+package hu.wolfman.fishscreensaver.util;
 
 import java.awt.Image;
+import java.util.Objects;
 import javax.swing.ImageIcon;
 
-/**
- *
- * @author FPeter
- */
-public class ImageTools {
+public class ImageUtil {
     
     public static Image getImage(String URL) {
-        return new ImageIcon(ImageTools.class.getResource(URL)).getImage();
+        return new ImageIcon(Objects.requireNonNull(ImageUtil.class.getResource(URL))).getImage();
     }
     
 }

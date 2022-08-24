@@ -1,24 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package screensaver;
+package hu.wolfman.fishscreensaver.frame;
 
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinReg;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JSlider;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import tools.Messages;
+import javax.swing.*;
 
-/**
- *
- * @author FPeter
- */
-public class SettingsForm extends javax.swing.JFrame {
+import hu.wolfman.fishscreensaver.util.Messages;
+
+public class SettingsForm extends JFrame {
 
     private int numberOfFish;
     private static final int MIN_FISH = 5;
@@ -48,7 +38,7 @@ public class SettingsForm extends javax.swing.JFrame {
             );   
         } catch (Exception e) {
             Messages.errorMessage("A beállításokat nem sikerült betölteni.", "Hiba");
-        } 
+        }
         return num;
     }
 
@@ -145,16 +135,11 @@ public class SettingsForm extends javax.swing.JFrame {
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         try {
-            Advapi32Util.registrySetIntValue(
-                WinReg.HKEY_CURRENT_USER, 
-                "SOFTWARE\\FishScreensaver", 
-                "NumberOfFish",
-                numberOfFish
-            );    
+            Advapi32Util.registrySetIntValue(WinReg.HKEY_CURRENT_USER, "SOFTWARE\\FishScreensaver",
+                    "NumberOfFish", numberOfFish);
         } catch (Exception e) {
             Messages.errorMessage("A beállításokat nem sikerült menteni.", "Hiba");
         }
-        
         System.exit(0);
     }//GEN-LAST:event_btnOKActionPerformed
 
@@ -180,7 +165,9 @@ public class SettingsForm extends javax.swing.JFrame {
                 } catch (UnsupportedLookAndFeelException ex) {
                     Logger.getLogger(SettingsForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                new SettingsForm().setVisible(true);
+                SettingsForm settingsForm = new SettingsForm();
+                settingsForm.setVisible(true);
+                SwingUtilities.updateComponentTreeUI(settingsForm);
             }
         });
     }

@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package tools;
+package hu.wolfman.fishscreensaver.util;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,10 +7,6 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-/**
- *
- * @author FPeter
- */
 public class Messages {
     
     static {
