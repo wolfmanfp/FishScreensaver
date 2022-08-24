@@ -5,16 +5,12 @@ import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
-
-import java.awt.*;
-import javax.swing.JFrame;
-
-import hu.wolfman.fishscreensaver.frame.InputHandler;
-import hu.wolfman.fishscreensaver.frame.RajzPanel;
-import hu.wolfman.fishscreensaver.frame.SettingsForm;
-import hu.wolfman.fishscreensaver.frame.Vezerlo;
+import hu.wolfman.fishscreensaver.frame.*;
 import hu.wolfman.fishscreensaver.util.Messages;
 import hu.wolfman.fishscreensaver.util.StringUtil;
+
+import javax.swing.*;
+import java.awt.*;
 
 public final class Main {
 
@@ -71,7 +67,7 @@ public final class Main {
         panel.setVezerlo(vezerlo);
         vezerlo.setRajzPanel(panel);
 
-        int numberOfFish = SettingsForm.readNumber();
+        int numberOfFish = Settings.readNumber();
 
         GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .getDefaultScreenDevice()
@@ -101,9 +97,8 @@ public final class Main {
         panel.setVezerlo(vezerlo);
         vezerlo.setRajzPanel(panel);
 
-        int numberOfFish = SettingsForm.readNumber();
-
         try {
+            int numberOfFish = Settings.readNumber();
             frame.setVisible(true);
 
             RECT previewWindowRect = new RECT();

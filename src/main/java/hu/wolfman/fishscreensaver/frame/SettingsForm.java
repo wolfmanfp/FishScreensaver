@@ -1,45 +1,32 @@
 package hu.wolfman.fishscreensaver.frame;
 
-import com.sun.jna.platform.win32.Advapi32Util;
-import com.sun.jna.platform.win32.WinReg;
+import com.sun.jna.platform.win32.Win32Exception;
+import hu.wolfman.fishscreensaver.util.Messages;
+
+import javax.swing.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
-
-import hu.wolfman.fishscreensaver.util.Messages;
 
 public class SettingsForm extends JFrame {
 
     private int numberOfFish;
-    private static final int MIN_FISH = 5;
-    private static final int MAX_FISH = 20;
 
     public SettingsForm() {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
 
-        //beolvasás registryből
-        numberOfFish = readNumber();
-
-        //GUI beálíítása
-        sHalSzam.setValue(numberOfFish);
-        sHalSzam.setMinimum(MIN_FISH);
-        sHalSzam.setMaximum(MAX_FISH);
-    }
-
-    public static int readNumber() {
-        int num = 0;
         try {
-            num = Advapi32Util.registryGetIntValue(
-                WinReg.HKEY_CURRENT_USER, 
-                "SOFTWARE\\FishScreensaver", 
-                "NumberOfFish"
-            );   
-        } catch (Exception e) {
+            //beolvasás registryből
+            numberOfFish = Settings.readNumber();
+            //GUI beálíítása
+            sHalSzam.setValue(numberOfFish);
+        } catch (Win32Exception e) {
             Messages.errorMessage("A beállításokat nem sikerült betölteni.", "Hiba");
         }
-        return num;
+
+        sHalSzam.setMinimum(Settings.MIN_FISH);
+        sHalSzam.setMaximum(Settings.MAX_FISH);
     }
 
     /**
@@ -135,8 +122,7 @@ public class SettingsForm extends JFrame {
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         try {
-            Advapi32Util.registrySetIntValue(WinReg.HKEY_CURRENT_USER, "SOFTWARE\\FishScreensaver",
-                    "NumberOfFish", numberOfFish);
+            Settings.saveNumber(numberOfFish);
         } catch (Exception e) {
             Messages.errorMessage("A beállításokat nem sikerült menteni.", "Hiba");
         }
