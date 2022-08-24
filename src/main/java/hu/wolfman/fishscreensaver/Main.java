@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hu.wolfman.fishscreensaver;
 
 import com.sun.jna.Native;
@@ -21,9 +16,6 @@ import hu.wolfman.fishscreensaver.frame.Vezerlo;
 import hu.wolfman.fishscreensaver.util.Messages;
 import hu.wolfman.fishscreensaver.util.StringUtil;
 
-/**
- * @author FPeter
- */
 public final class Main {
 
     public static void main(final String[] args) {
@@ -45,8 +37,10 @@ public final class Main {
                     new SettingsForm().setVisible(true);
                     break;
                 case "/p":
-                    if (secondArgument == null) {
+                    if (StringUtil.isEmpty(secondArgument)) {
                         Messages.errorMessage("A szülő ablak nem található.", "Hiba");
+                    } else if (secondArgument.equals("0")) {
+                        testPreview();
                     } else {
                         HWND parentWindow = new HWND(new Pointer(Long.parseLong(secondArgument)));
                         initPreview(parentWindow);
@@ -86,6 +80,13 @@ public final class Main {
         vezerlo.vizbeRak(numberOfFish);
     }
 
+    private static void testPreview() {
+        JFrame frame = new JFrame();
+        frame.setBounds(100, 100, 100, 100);
+        frame.setVisible(true);
+        initPreview(new HWND(Native.getComponentPointer(frame)));
+    }
+
     private static void initPreview(HWND parentWindow) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,16 +106,12 @@ public final class Main {
         try {
             frame.setVisible(true);
 
-            HWND childWindow = new HWND(Native.getComponentPointer(frame));
-            User32.INSTANCE.SetParent(childWindow, parentWindow);
-            User32.INSTANCE.SetWindowLong(childWindow, -16,
-                    (User32.INSTANCE.GetWindowLong(childWindow, -16) | 0x40000000));
-
             RECT previewWindowRect = new RECT();
             User32.INSTANCE.GetWindowRect(parentWindow, previewWindowRect);
+            Rectangle awtRectangle = previewWindowRect.toRectangle();
 
-            frame.setBounds(previewWindowRect.toRectangle());
-            frame.setLocation(new Point(0, 0));
+            frame.setBounds(awtRectangle);
+            frame.setLocation(new Point(awtRectangle.x, awtRectangle.y));
 
             vezerlo.vizbeRak(numberOfFish);
         } catch (Exception e) {
